@@ -1,10 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/common";
 import { UsersService } from "../users/users.service";
 import * as bcrypt from "bcryptjs";
 import { JwtService } from "@nestjs/jwt";
 import { CreateUserDto } from "../users/dto/user.create.dto";
-import { UserDto } from "../users/dto/user.dto";
-import { use } from "passport";
 import { UserLoginDto } from "../users/dto/user.login.dto";
 
 @Injectable()
@@ -33,10 +31,10 @@ export class AuthService {
       email: user.email,
       first_name: user.first_name,
       last_name: user.last_name,
-      role: user.roles
+      roles: user.roles
     };
     return {
-      access_token: this.jwtService.sign(payload)
+      token: this.jwtService.sign(payload)
     };
   }
 
@@ -54,7 +52,7 @@ export class AuthService {
       email: user.email,
       first_name: user.first_name,
       last_name: user.last_name,
-      role: user.roles
+      roles: user.roles
     };
 
     return {
