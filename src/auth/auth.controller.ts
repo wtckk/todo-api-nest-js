@@ -3,8 +3,9 @@ import { AuthService } from "./auth.service";
 import { LocalStrategy } from "./strategy/local.strategy";
 import { UserLoginDto } from "../users/dto/user.login.dto";
 import { CreateUserDto } from "../users/dto/user.create.dto";
+import { ApiTags } from "@nestjs/swagger";
 
-
+@ApiTags("Авторизация")
 @Controller("api/v1/auth")
 export class AuthController {
   constructor(private authService: AuthService) {
@@ -20,4 +21,5 @@ export class AuthController {
   async register(@Body() user: CreateUserDto) {
     return await this.authService.register(user);
   }
+
 }

@@ -32,7 +32,8 @@ export class AuthService {
       id: user.id,
       email: user.email,
       first_name: user.first_name,
-      last_name: user.last_name
+      last_name: user.last_name,
+      role: user.roles
     };
     return {
       access_token: this.jwtService.sign(payload)
@@ -40,7 +41,7 @@ export class AuthService {
   }
 
   async register(userDto: CreateUserDto){
-    const candidate = await this.usersService.findUserByEmail(userDto.email);
+    const candidate = await this.usersService.getUserByEmail(userDto.email);
     if (candidate) {
       throw new BadRequestException({message: "Пользователь с данным email уже существует"});
     }
@@ -52,7 +53,8 @@ export class AuthService {
       id: user.id,
       email: user.email,
       first_name: user.first_name,
-      last_name: user.last_name
+      last_name: user.last_name,
+      role: user.roles
     };
 
     return {

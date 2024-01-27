@@ -8,9 +8,10 @@ import { LocalStrategy } from "./strategy/local.strategy";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule } from "@nestjs/config";
 import { JwtStrategy } from "./strategy/jwt.strategy";
+import { RolesGuard } from "./guard/roles.guard";
 
 @Module({
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy, RolesGuard],
   controllers: [AuthController],
   imports: [
     ConfigModule.forRoot({

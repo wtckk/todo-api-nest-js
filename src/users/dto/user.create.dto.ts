@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Role } from "../../roles/entity/roles.entity";
 
 export class CreateUserDto{
 
@@ -13,4 +14,5 @@ export class CreateUserDto{
 
   @ApiProperty({example: 'password', description: 'Пароль'})
   readonly password: string;
+
 }
