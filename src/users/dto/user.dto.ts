@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Role } from "../../roles/entity/roles.entity";
+import { UserRole } from "../enums/user-role.enum";
 export class UserDto{
   @ApiProperty({example: '1b8cfbc9-b380-4e16-9012-292acea3c8f8', description: 'Уникальный идентификатор'})
   id: string;
@@ -14,5 +14,5 @@ export class UserDto{
   email: string;
 
   @ApiProperty({example: ['member'], description:'Роль'})
-  roles: Role[]
+  roles: UserRole[]
 }

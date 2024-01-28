@@ -1,33 +1,29 @@
-import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
+import {  Injectable, NotFoundException } from "@nestjs/common";
 import { User } from "./users.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { CreateUserDto } from "./dto/user.create.dto";
-import { RolesService } from "../roles/roles.service";
-import { AddRoleDto } from "./dto/add-role.dto";
+import { UserAddRole } from "./dto/user-add-role.dto";
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(User) private userRepository: Repository<User>,
-    private roleService: RolesService
+    @InjectRepository(User) private userRepository: Repository<User>
   ) {
   }
 
   async createUser(userDto: CreateUserDto) {
     const user = this.userRepository.create(userDto);
-    const role = await this.roleService.getRoleByValue("USER");
-    user.roles = [role];
     await this.userRepository.save(user);
     return user;
   }
 
   async findAllUsers() {
-    return await this.userRepository.find({ relations: ["roles"] });
+    return await this.userRepository.find();
   }
 
   async findUserById(id: string) {
-    const user = await this.userRepository.findOne({ where: { id }, relations: ["roles"] });
+    const user = await this.userRepository.findOneBy({ id });
     if (!user) {
       throw new NotFoundException({ message: "Данный пользователь не найден" });
     }
@@ -35,7 +31,7 @@ export class UsersService {
   }
 
   async findUserByEmail(email: string) {
-    const user: User = await this.userRepository.findOne({ where: { email }, relations: ["roles"] });
+    const user: User = await this.userRepository.findOneBy({ email });
     if (!user) {
       throw new NotFoundException({ message: "Пользователь не найден" });
     }
@@ -43,20 +39,22 @@ export class UsersService {
   }
 
   async getUserByEmail(email: string) {
-    const user: User = await this.userRepository.findOne({ where: { email }, relations: ["roles"] });
+    const user: User = await this.userRepository.findOneBy({ email });
     return user;
   }
 
-  async addRole(addRoleDto: AddRoleDto) {
-    const id: string = addRoleDto.userId
-    const user = await this.userRepository.findOne({ where: {id}, relations: ['roles']});
-    const role = await this.roleService.getRoleByValue(addRoleDto.value);
-    console.log(user)
-    if (role && user) {
-      user.roles = [...user.roles, role];
-      await this.userRepository.save(user);
-      return addRoleDto;
+  async addRole(dto: UserAddRole) {
+    let id: string = dto.userId;
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundException({ message: "Пользователь не найден" });
     }
-    throw new NotFoundException({ message: "Пользователь или роль не найдены" });
+
+    if (!user.roles.includes(dto.role)) {
+      user.roles.push(dto.role);
+      await this.userRepository.save(user);
+    }
+
+    return user;
   }
 }

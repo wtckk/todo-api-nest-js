@@ -5,9 +5,8 @@ import { ConfigModule } from "@nestjs/config";
 import * as process from "process";
 import { User } from "./users/users.entity";
 import { AuthModule } from './auth/auth.module';
-import { RolesModule } from './roles/roles.module';
-import { Role } from "./roles/entity/roles.entity";
-import { UserRole } from "./roles/entity/user-roles.entity";
+import { TasksModule } from './tasks/tasks.module';
+import { Task } from "./tasks/tasks.entity";
 
 @Module({
   imports: [
@@ -21,14 +20,14 @@ import { UserRole } from "./roles/entity/user-roles.entity";
       username: process.env.MYSQL_USER,
       password: process.env.MYSQL_PASSWORD,
       database: process.env.MYSQL_DATABASE,
-      entities: [User, Role, UserRole],
+      entities: [User, Task],
       synchronize: true,
       autoLoadEntities: true,
       logging: ["query", "error"]
     }),
     UsersModule,
     AuthModule,
-    RolesModule,
+    TasksModule,
   ],
   controllers: [],
   providers: [],
