@@ -10,7 +10,7 @@ import { JwtStrategy } from "./strategy/jwt.strategy";
 import { RolesGuard } from "./guard/roles.guard";
 
 @Module({
-  providers: [AuthService, LocalStrategy, JwtStrategy, RolesGuard],
+  providers: [AuthService, LocalStrategy, JwtStrategy],
   controllers: [AuthController],
   imports: [
     ConfigModule.forRoot({

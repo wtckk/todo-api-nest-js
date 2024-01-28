@@ -35,7 +35,6 @@ export class UsersController {
 
   @ApiOperation({ summary: "Выдача роли" })
   @ApiResponse({ status: 200})
-  @UseGuards(JwtAuthGuard)
   @Post('/role')
   addRole(@Body() dto: UserAddRole){
     return this.usersService.addRole(dto)

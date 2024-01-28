@@ -1,7 +1,8 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsString } from "class-validator";
 import { TaskStatusEnum } from "./enum/task-status.enum";
+import { User } from "../users/users.entity";
 
 @Entity("tasks")
 export class Task{
@@ -19,11 +20,15 @@ export class Task{
   @IsString()
   description: string
 
-  @ApiProperty({example: "Починить кран в ванной", description: "Название задачи"})
+  @ApiProperty({example: TaskStatusEnum.NEW, description: "Название задачи"})
   @Column({type: "enum", enum: TaskStatusEnum, default: TaskStatusEnum.NEW})
   status: TaskStatusEnum
 
-  @ApiProperty({ description: "Дата регистрации" })
+  @ManyToOne(() => User, (user) => user.tasks)
+  @JoinColumn({ name: 'ownerId' })
+  owner: User;
+
+  @ApiProperty({ description: "Дата создания" })
   @CreateDateColumn()
   createdAt?: Date;
 }

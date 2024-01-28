@@ -2,12 +2,12 @@ import {
   BeforeInsert,
   Column,
   CreateDateColumn,
-  Entity,
+  Entity, OneToMany,
   PrimaryGeneratedColumn
 } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
-import { Task } from "../tasks/tasks.entity";
 import { UserRole } from "./enums/user-role.enum";
+import { Task } from "../tasks/tasks.entity";
 
 @Entity("users")
 export class User {
@@ -34,6 +34,10 @@ export class User {
   @ApiProperty({ example: ["admin"], description: "Роли" })
   @Column({type: "set", enum: UserRole, default: [UserRole.MEMBER]})
   roles: UserRole[];
+
+  @ApiProperty({description: "Задачи пользователя"})
+  @OneToMany(() => Task, (task) => task.owner)
+  tasks: Task[]
 
   @ApiProperty({ description: "Дата регистрации" })
   @CreateDateColumn()
