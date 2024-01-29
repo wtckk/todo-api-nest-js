@@ -6,10 +6,12 @@ import { Transform } from "class-transformer";
 
 export class TaskFilterSortDto{
   @ApiProperty({example: "Todo app", description: "Название задачи"})
+  @IsOptional()
   @IsString()
   title?: string
 
   @ApiProperty({example: "to", description: "Поисковой запрос"})
+  @IsOptional()
   @IsString()
   search: string
 

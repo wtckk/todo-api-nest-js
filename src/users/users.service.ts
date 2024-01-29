@@ -4,6 +4,8 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { CreateUserDto } from "./dto/user.create.dto";
 import { UserAddRole } from "./dto/user-add-role.dto";
+import { plainToClass } from "class-transformer";
+import { UserDto } from "./dto/user.dto";
 
 @Injectable()
 export class UsersService {
@@ -23,11 +25,13 @@ export class UsersService {
   }
 
   async findUserById(id: string) {
-    const user = await this.userRepository.findOneBy({ id });
+    const user = await this.userRepository.findOne(
+      {where: { id } },
+      );
     if (!user) {
       throw new NotFoundException({ message: "Данный пользователь не найден" });
     }
-    return user;
+    return user
   }
 
   async findUserByEmail(email: string) {
@@ -35,26 +39,26 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException({ message: "Пользователь не найден" });
     }
-    return user;
+    return user
   }
 
   async getUserByEmail(email: string) {
-    const user: User = await this.userRepository.findOneBy({ email });
+    const user: User = await this.userRepository.createQueryBuilder('user')
+      .addSelect('user.password')
+      .where('user.email = :email', { email: email })
+      .getOne();
     return user;
   }
 
   async addRole(dto: UserAddRole) {
     let id: string = dto.userId;
-    const user = await this.userRepository.findOne({ where: { id } });
-    if (!user) {
-      throw new NotFoundException({ message: "Пользователь не найден" });
+    const userDto = await this.findUserById(id);
+
+    if (!userDto.roles.includes(dto.role)) {
+      userDto.roles.push(dto.role);
+      await this.userRepository.save(userDto);
     }
 
-    if (!user.roles.includes(dto.role)) {
-      user.roles.push(dto.role);
-      await this.userRepository.save(user);
-    }
-
-    return user;
+    return userDto;
   }
 }

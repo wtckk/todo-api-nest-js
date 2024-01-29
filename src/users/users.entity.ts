@@ -8,6 +8,7 @@ import {
 import { ApiProperty } from "@nestjs/swagger";
 import { UserRole } from "./enums/user-role.enum";
 import { Task } from "../tasks/tasks.entity";
+import { Exclude } from "class-transformer";
 
 @Entity("users")
 export class User {
@@ -28,7 +29,7 @@ export class User {
   email: string;
 
   @ApiProperty({ example: "password", description: "Пароль" })
-  @Column({ type: "varchar", nullable: false })
+  @Column({ type: "varchar", nullable: false, select: false})
   password: string;
 
   @ApiProperty({ example: ["admin"], description: "Роли" })
