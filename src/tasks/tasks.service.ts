@@ -5,6 +5,7 @@ import { Task } from "./tasks.entity";
 import { CreateTaskDto } from "./dto/create.task.dto";
 import { TaskFilterSortDto } from "./dto/task-filter.dto";
 import { UpdateTaskDto } from "./dto/update.task.dto";
+import { UserDto } from "../users/dto/user.dto";
 
 @Injectable()
 export class TasksService {
@@ -13,8 +14,9 @@ export class TasksService {
   ) {
   }
 
-  async createTask(createTaskDto: CreateTaskDto, ownerId: string) {
-    const task = this.taskRepository.create({ ...createTaskDto, owner: { id: ownerId } });
+  async createTask(createTaskDto: CreateTaskDto, user: UserDto) {
+
+    const task = this.taskRepository.create({ ...createTaskDto, owner: {id: user.id, first_name: user.first_name, last_name: user.last_name}});
     return await this.taskRepository.save(task);
   }
 
@@ -59,7 +61,18 @@ export class TasksService {
   }
 
   async findTaskById(id: string) {
-    const task = await this.taskRepository.findOneBy({ id });
+    const task = await this.taskRepository.findOne({
+      where: {id},
+      relations: { owner: true },
+      select: {
+        owner: {
+          id: true,
+            first_name: true,
+            last_name: true }
+      }
+    }
+
+    );
     if (!task) {
       throw new NotFoundException({ message: "Данная задача не найдена " });
     }

@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseEnumPipe,
   ParseUUIDPipe,
   Post,
   Put, Query,
@@ -57,7 +56,7 @@ export class TasksController {
   @ApiResponse({status: 200, type: Task})
   @Post('create')
   createTask(@Body() dto: CreateTaskDto, @UserDecorator() user: UserDto){
-    return this.taskService.createTask(dto, user.id)
+    return this.taskService.createTask(dto, user)
   }
 
 
@@ -71,8 +70,8 @@ export class TasksController {
   @ApiOperation({summary: "Обновление информации о задаче"})
   @ApiResponse({status: 200, type: Task})
   @Put('update/:id')
-  updateTask(@Param('id', new ParseUUIDPipe({version: "4"})) id: string, @Body() dto: UpdateTaskDto){
-    return this.taskService.updateTask(id, dto)
+  updateTask(@Param('id', new ParseUUIDPipe({version: "4"})) id: string, @Body() dto: UpdateTaskDto, @UserDecorator() user: UserDto){
+    return this.taskService.updateTask(id, dto, user)
   }
 
   @ApiOperation({summary: "Удаление задачи"})
