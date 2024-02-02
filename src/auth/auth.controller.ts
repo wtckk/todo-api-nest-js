@@ -18,7 +18,7 @@ export class AuthController {
   }
 
   @ApiOperation({ summary: "Регистрация пользователя" })
-  @ApiResponse({status: 200})
+  @ApiResponse({status: 201})
   @Post("register")
   async register(@Body() user: CreateUserDto) {
     return await this.authService.register(user);

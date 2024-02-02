@@ -12,7 +12,7 @@ import {
 import { JwtAuthGuard } from "../auth/guard/jwt-auth.guard";
 import { CreateTaskDto } from "./dto/create.task.dto";
 import { TasksService } from "./tasks.service";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Task } from "./tasks.entity";
 import { UserDecorator } from "../users/decorator/user.decorator";
 import { UserDto } from "../users/dto/user.dto";
@@ -21,8 +21,11 @@ import { Roles } from "../auth/decorator/role-auth.decorator";
 import { UserRole } from "../users/enums/user-role.enum";
 import { UpdateTaskDto } from "./dto/update.task.dto";
 import { TaskFilterSortDto } from "./dto/task-filter.dto";
+import { TaskStatusEnum } from "./enum/task-status.enum";
+import { TaskSortFieldEnum } from "./enum/task-sort-field.enum";
 
 @ApiTags("Задачи")
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('api/v1/tasks')
 export class TasksController {
@@ -39,6 +42,36 @@ export class TasksController {
   }
 
   @ApiOperation({summary: "Фильтрация и сортировка задач пользователя"})
+  @ApiQuery({
+    name: 'title',
+    description: 'Поиск по точному названию задачи',
+    required: false,
+    type: String,
+  })
+  @ApiQuery({
+    name: 'search',
+    description: 'Поисковой запрос',
+    required: false,
+    type: String,
+  })
+  @ApiQuery({
+    name: 'status',
+    description: 'Сортировка по статусу',
+    required: false,
+    enum: TaskStatusEnum,
+  })
+  @ApiQuery({
+    name: 'sortBy',
+    description: 'Сортировка по возрастанию/убыванию',
+    required: false,
+    enum: ['ASC', 'DESC'],
+  })
+  @ApiQuery({
+    name: 'field',
+    description: 'Сортировка по полю',
+    required: false,
+    enum: TaskSortFieldEnum,
+  })
   @ApiResponse({status: 200, type: [Task]})
   @Get()
   findTasksWithFilter(@Query() filterSortDto: TaskFilterSortDto, @UserDecorator() user: UserDto){
@@ -53,7 +86,7 @@ export class TasksController {
   }
 
   @ApiOperation({summary: "Создание новой задачи"})
-  @ApiResponse({status: 200, type: Task})
+  @ApiResponse({status: 201, type: Task})
   @Post('create')
   createTask(@Body() dto: CreateTaskDto, @UserDecorator() user: UserDto){
     return this.taskService.createTask(dto, user)
@@ -68,10 +101,10 @@ export class TasksController {
   }
 
   @ApiOperation({summary: "Обновление информации о задаче"})
-  @ApiResponse({status: 200, type: Task})
+  @ApiResponse({status: 201, type: Task})
   @Put('update/:id')
   updateTask(@Param('id', new ParseUUIDPipe({version: "4"})) id: string, @Body() dto: UpdateTaskDto, @UserDecorator() user: UserDto){
-    return this.taskService.updateTask(id, dto, user)
+    return this.taskService.updateTask(id, dto)
   }
 
   @ApiOperation({summary: "Удаление задачи"})

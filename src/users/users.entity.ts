@@ -16,11 +16,11 @@ export class User {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @ApiProperty({ example: "user", description: "Имя пользователя" })
+  @ApiProperty({ example: "Никита", description: "Имя пользователя" })
   @Column({ type: "varchar", length: 32, unique: false, nullable: false })
   first_name: string;
 
-  @ApiProperty({ example: "user", description: "Фамилия пользователя" })
+  @ApiProperty({ example: "Шутников", description: "Фамилия пользователя" })
   @Column({ type: "varchar", length: 32, unique: false, nullable: false })
   last_name: string;
 
@@ -32,7 +32,7 @@ export class User {
   @Column({ type: "varchar", nullable: false, select: false})
   password: string;
 
-  @ApiProperty({ example: ["admin"], description: "Роли" })
+  @ApiProperty({ example: ["admin", "member"], description: "Роли" })
   @Column({type: "set", enum: UserRole, default: [UserRole.MEMBER]})
   roles: UserRole[];
 

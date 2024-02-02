@@ -47,6 +47,7 @@ export class UsersService {
       .addSelect('user.password')
       .where('user.email = :email', { email: email })
       .getOne();
+    console.log(user)
     return user;
   }
 

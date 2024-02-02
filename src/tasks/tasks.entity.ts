@@ -15,12 +15,12 @@ export class Task{
   @IsString()
   title: string
 
-  @ApiProperty({example: "Починить кран в ванной", description: "Название задачи"})
+  @ApiProperty({example: "Починить кран в ванной", description: "Описание задачи"})
   @Column({type: "varchar"})
   @IsString()
   description: string
 
-  @ApiProperty({example: TaskStatusEnum.NEW, description: "Название задачи"})
+  @ApiProperty({example: TaskStatusEnum.NEW, description: "Статус задачи"})
   @Column({type: "enum", enum: TaskStatusEnum, default: TaskStatusEnum.NEW})
   status: TaskStatusEnum
 

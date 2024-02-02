@@ -12,12 +12,13 @@ async function start() {
     .setTitle('To-do list')
     .setDescription('RESTful API для управления задачами')
     .setVersion('1.0.0')
+    .addBearerAuth()
     .build()
   const document = SwaggerModule.createDocument(app, config)
   SwaggerModule.setup('/api/v1/docs', app, document)
 
   app.enableCors({
-    origin: 'http://localhost:5000',
+    origin: 'http://localhost:8080',
   });
 
   app.useGlobalPipes(new ValidationPipe())

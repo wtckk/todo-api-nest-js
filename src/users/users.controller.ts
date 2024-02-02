@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
 import { UsersService } from "./users.service";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { User } from "./users.entity";
 import { JwtAuthGuard } from "../auth/guard/jwt-auth.guard";
 import { UserRole } from "./enums/user-role.enum";
@@ -10,6 +10,7 @@ import { Roles } from "../auth/decorator/role-auth.decorator";
 
 
 @ApiTags("Пользователи")
+@ApiBearerAuth()
 @Controller("api/v1/users")
 export class UsersController {
   constructor(private usersService: UsersService) {
@@ -34,7 +35,9 @@ export class UsersController {
   }
 
   @ApiOperation({ summary: "Выдача роли" })
-  @ApiResponse({ status: 200})
+  @ApiResponse({ status: 201})
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('/role')
   addRole(@Body() dto: UserAddRole){
     return this.usersService.addRole(dto)

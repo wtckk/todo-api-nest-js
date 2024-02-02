@@ -12,6 +12,7 @@ export class UpdateTaskDto{
   @MaxLength(200, {message: "Максимальное значение символов 200"})
   description: string;
 
+  @ApiProperty({example: TaskStatusEnum.IN_PROGRESS, description: "Статус задачи"})
   @IsEnum(TaskStatusEnum)
   status: TaskStatusEnum
 }
