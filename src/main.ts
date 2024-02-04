@@ -18,7 +18,7 @@ async function start() {
   SwaggerModule.setup('/api/v1/docs', app, document)
 
   app.enableCors({
-    origin: 'http://localhost:8080',
+    origin: '*',
   });
 
   app.useGlobalPipes(new ValidationPipe())

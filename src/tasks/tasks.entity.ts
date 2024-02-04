@@ -1,8 +1,9 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsString } from "class-validator";
 import { TaskStatusEnum } from "./enum/task-status.enum";
 import { User } from "../users/users.entity";
+import { TaskComment } from "../task-comments/task-comment.entity";
 
 @Entity("tasks")
 export class Task{
@@ -27,6 +28,9 @@ export class Task{
   @ManyToOne(() => User, (user) => user.tasks)
   @JoinColumn({ name: 'ownerId' })
   owner: User;
+
+  @OneToMany(() => TaskComment, (comment) => comment.task, { cascade: true })
+  comments: TaskComment[];
 
   @ApiProperty({ description: "Дата создания" })
   @CreateDateColumn()

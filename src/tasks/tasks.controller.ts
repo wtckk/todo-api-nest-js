@@ -32,7 +32,7 @@ export class TasksController {
   constructor(private taskService: TasksService) {
   }
 
-  @ApiOperation({summary: "Получение списка всех задач"})
+  @ApiOperation({summary: "Получение списка всех задач для администратора"})
   @ApiResponse({status: 200, type: [Task]})
   @Roles(UserRole.ADMIN)
   @UseGuards(RolesGuard)

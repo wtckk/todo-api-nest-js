@@ -6,6 +6,7 @@ import { CreateTaskDto } from "./dto/create.task.dto";
 import { TaskFilterSortDto } from "./dto/task-filter.dto";
 import { UpdateTaskDto } from "./dto/update.task.dto";
 import { UserDto } from "../users/dto/user.dto";
+import { WsException } from "@nestjs/websockets";
 
 @Injectable()
 export class TasksService {
@@ -22,13 +23,13 @@ export class TasksService {
 
   async findAll(): Promise<Task[]> {
     return await this.taskRepository.find({
-      relations: { owner: true },
+      relations: { owner: true, comments: true },
       select: {
         owner: {
           id: true,
           first_name: true,
           last_name: true
-        }
+        },
       }
     });
   }
@@ -109,5 +110,4 @@ export class TasksService {
     await this.taskRepository.update(id, updateTaskDto);
     return await this.findTaskById(id)
   }
-
 }

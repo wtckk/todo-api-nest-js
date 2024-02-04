@@ -1,11 +1,9 @@
-import {  Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { User } from "./users.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { CreateUserDto } from "./dto/user.create.dto";
 import { UserAddRole } from "./dto/user-add-role.dto";
-import { plainToClass } from "class-transformer";
-import { UserDto } from "./dto/user.dto";
 
 @Injectable()
 export class UsersService {
@@ -21,7 +19,7 @@ export class UsersService {
   }
 
   async findAllUsers() {
-    return await this.userRepository.find({relations: {tasks: true}});
+    return await this.userRepository.find({relations: {tasks: true, comments: true}});
   }
 
   async findUserById(id: string) {
@@ -47,7 +45,6 @@ export class UsersService {
       .addSelect('user.password')
       .where('user.email = :email', { email: email })
       .getOne();
-    console.log(user)
     return user;
   }
 

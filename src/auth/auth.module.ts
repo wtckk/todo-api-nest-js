@@ -7,7 +7,6 @@ import { LocalStrategy } from "./strategy/local.strategy";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule } from "@nestjs/config";
 import { JwtStrategy } from "./strategy/jwt.strategy";
-import { RolesGuard } from "./guard/roles.guard";
 
 @Module({
   providers: [AuthService, LocalStrategy, JwtStrategy],
@@ -22,6 +21,7 @@ import { RolesGuard } from "./guard/roles.guard";
       secret: process.env.SECRET,
       signOptions: {expiresIn: '24h'}
     })
-  ]
+  ],
+  exports: [AuthService]
 })
 export class AuthModule {}

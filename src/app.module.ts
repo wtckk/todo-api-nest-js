@@ -7,6 +7,8 @@ import { User } from "./users/users.entity";
 import { AuthModule } from './auth/auth.module';
 import { TasksModule } from './tasks/tasks.module';
 import { Task } from "./tasks/tasks.entity";
+import { TaskCommentsModule } from './task-comments/task-comments.module';
+import { TaskComment } from "./task-comments/task-comment.entity";
 
 @Module({
   imports: [
@@ -20,7 +22,7 @@ import { Task } from "./tasks/tasks.entity";
       username: process.env.MYSQL_USER,
       password: process.env.MYSQL_PASSWORD,
       database: process.env.MYSQL_DATABASE,
-      entities: [User, Task],
+      entities: [User, Task, TaskComment],
       synchronize: true,
       autoLoadEntities: true,
       logging: ["query", "error"]
@@ -28,6 +30,7 @@ import { Task } from "./tasks/tasks.entity";
     UsersModule,
     AuthModule,
     TasksModule,
+    TaskCommentsModule
   ],
   controllers: [],
   providers: [],
