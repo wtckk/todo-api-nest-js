@@ -2,6 +2,8 @@ import { Controller } from '@nestjs/common';
 import { CommentsService } from "./comments.service";
 import { MessagePattern } from "@nestjs/microservices";
 import { CreateCommentDto } from "./dto/create-comment.dto";
+import { Observable } from "rxjs";
+import { Comment } from "./comments.entity";
 
 @Controller()
 export class CommentsController {
@@ -9,18 +11,18 @@ export class CommentsController {
   }
 
   @MessagePattern({ cmd: 'createComment' })
-  createComment(dto: CreateCommentDto){
-    return this.commentService.create(dto)
+  async createComment(dto: CreateCommentDto): Promise<Comment>{
+    return await this.commentService.create(dto)
   }
 
   @MessagePattern({ cmd: 'getAllCommentsByTask' })
-  findAllByTask(taskId: string){
-    return this.commentService.findAllByTask(taskId)
+  async findAllByTask(taskId: string): Promise<Comment[]>{
+    return await this.commentService.findAllByTask(taskId)
   }
 
   @MessagePattern({cmd: 'getAllComments'})
-  findAll(){
-    return this.commentService.findAll()
+  async findAll(): Promise<Comment[]>{
+    return await this.commentService.findAll()
   }
 
 }

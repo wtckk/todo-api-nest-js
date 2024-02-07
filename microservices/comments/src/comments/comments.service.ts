@@ -17,15 +17,16 @@ export class CommentsService {
     return await this.commentRepository.save(comment);
   }
 
-  async findAll() {
-    return await this.commentRepository.find({
+  async findAll(): Promise<Comment[]> {
+    const comments = await this.commentRepository.find({
       order: {
         createdAt: "DESC"
       }
     });
+    return comments;
   }
-  async findAllByTask(taskId: string) {
-    return await this.commentRepository.find({
+  async findAllByTask(taskId: string): Promise<Comment[]> {
+    const comments = await this.commentRepository.find({
       where: {
         taskId
       },
@@ -33,6 +34,7 @@ export class CommentsService {
         createdAt: "DESC"
       }
     });
+    return comments;
   }
 
 

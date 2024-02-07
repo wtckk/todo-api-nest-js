@@ -5,6 +5,8 @@ import { CreateCommentDto } from "./dto/create-comment.dto";
 import { UserDecorator } from "../users/decorator/user.decorator";
 import { UserDto } from "../users/dto/user.dto";
 import { JwtAuthGuard } from "../auth/guard/jwt-auth.guard";
+import { Observable } from "rxjs";
+import { Comment } from "../../microservices/comments/src/comments/comments.entity";
 
 @ApiTags("Комментарии")
 @ApiBearerAuth()
@@ -17,24 +19,22 @@ export class CommentsController {
   @ApiOperation({ summary: "Создания комментария" })
   @ApiResponse({ status: 201 })
   @Post("create")
-  create(@Body() dto: CreateCommentDto, @UserDecorator() user: UserDto) {
-    return this.commentService.create(dto, user.id);
+  async create(@Body() dto: CreateCommentDto, @UserDecorator() user: UserDto){
+    return await this.commentService.create(dto, user.id);
   }
 
   @ApiOperation({ summary: "Получение всех комментариев" })
   @ApiResponse({ status: 200 })
   @Get("all")
-  findAll() {
-    const comments = this.commentService.findAll();
-
-    return comments
+  async findAll() {
+    return await this.commentService.findAll();
   }
 
   @ApiOperation({ summary: "Получение комментария определенной задачи" })
   @ApiResponse({ status: 200 })
   @Get("by-task/:taskId")
-  findAllByTask(@Param("taskId", new ParseUUIDPipe({ version: "4" })) taskId: string) {
-    return this.commentService.findAllByTask(taskId);
+  async findAllByTask(@Param("taskId", new ParseUUIDPipe({ version: "4" })) taskId: string) {
+    return await this.commentService.findAllByTask(taskId);
   }
 
 
