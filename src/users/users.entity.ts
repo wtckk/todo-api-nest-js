@@ -8,7 +8,6 @@ import {
 import { ApiProperty } from "@nestjs/swagger";
 import { UserRole } from "./enums/user-role.enum";
 import { Task } from "../tasks/tasks.entity";
-import { TaskComment } from "../task-comments/task-comment.entity";
 
 @Entity("users")
 export class User {
@@ -40,9 +39,6 @@ export class User {
   @OneToMany(() => Task, (task) => task.owner)
   tasks: Task[]
 
-  @ApiProperty({description: "Комментарии пользователя"})
-  @OneToMany(() => TaskComment, (comment) => comment.user)
-  comments: TaskComment[];
 
   @ApiProperty({ description: "Дата регистрации" })
   @CreateDateColumn()

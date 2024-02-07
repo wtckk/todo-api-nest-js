@@ -1,14 +1,13 @@
-import { Module } from '@nestjs/common';
+import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { UsersModule } from './users/users.module';
+import { UsersModule } from "./users/users.module";
 import { ConfigModule } from "@nestjs/config";
 import * as process from "process";
 import { User } from "./users/users.entity";
-import { AuthModule } from './auth/auth.module';
-import { TasksModule } from './tasks/tasks.module';
+import { AuthModule } from "./auth/auth.module";
+import { TasksModule } from "./tasks/tasks.module";
 import { Task } from "./tasks/tasks.entity";
-import { TaskCommentsModule } from './task-comments/task-comments.module';
-import { TaskComment } from "./task-comments/task-comment.entity";
+import { CommentsModule } from "./comments/comments.module";
 
 @Module({
   imports: [
@@ -22,7 +21,7 @@ import { TaskComment } from "./task-comments/task-comment.entity";
       username: process.env.MYSQL_USER,
       password: process.env.MYSQL_PASSWORD,
       database: process.env.MYSQL_DATABASE,
-      entities: [User, Task, TaskComment],
+      entities: [User, Task],
       synchronize: true,
       autoLoadEntities: true,
       logging: ["query", "error"]
@@ -30,7 +29,7 @@ import { TaskComment } from "./task-comments/task-comment.entity";
     UsersModule,
     AuthModule,
     TasksModule,
-    TaskCommentsModule
+    CommentsModule,
   ],
   controllers: [],
   providers: [],

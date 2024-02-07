@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import * as process from "process";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { ValidationPipe } from "./pipes/validation.pipes";
+import { MicroserviceOptions, Transport } from "@nestjs/microservices";
 
 async function start() {
   const PORT = process.env.PORT || 5000

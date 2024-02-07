@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   mysql:
+    container_name: todo
     image: mysql:8.3.0
     restart: always
     command:
@@ -14,5 +15,21 @@ services:
       - "3306:3306"
     volumes:
       - mysql:/var/lib/mysql
+
+  mysql2:
+    container_name: comments
+    image: mysql:8.3.0
+    restart: always
+    command:
+      --default-authentication-plugin=caching_sha2_password
+
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: comments
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql2:/var/lib/mysql
 volumes:
   mysql:
+  mysql2:

@@ -23,7 +23,7 @@ export class TasksService {
 
   async findAll(): Promise<Task[]> {
     return await this.taskRepository.find({
-      relations: { owner: true, comments: true },
+      relations: { owner: true },
       select: {
         owner: {
           id: true,
